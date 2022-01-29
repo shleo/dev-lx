@@ -14,8 +14,13 @@ To facilitate development, we will use `conda` to manage our python environment.
 3. Change the working directory to etf-arbitrage folder.
 
 4. Install python environment
+ - If you are on Linux or MacOS, run:
  ```
  conda env create -f environment.yml
+ ```
+ - If you are on Windows, run:
+ ```
+ conda env create -f environment-win.yml
  ```
  This should create a conda environment named **etf-arbitrage** that includes Python 3.6 and necessary libraries for this project.
 
