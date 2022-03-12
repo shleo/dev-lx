@@ -10,10 +10,14 @@ import backtrader as bt
 
 # Import local components
 from strategies.simple_strategy import SimpleStrategy
+from brokers.etf_arbitrage_broker import EtfArbitrageBroker
 
 if __name__ == '__main__':
     # Create a cerebro entity
     cerebro = bt.Cerebro()
+
+    # Add a broker
+    cerebro.broker = EtfArbitrageBroker()
 
     # Add a strategy
     cerebro.addstrategy(SimpleStrategy)

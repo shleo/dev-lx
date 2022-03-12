@@ -6,6 +6,7 @@ import backtrader as bt
 
 class StrategyBase(bt.Strategy):
     def __init__(self):
+        super().__init__()
         self.log('*' * 5 + 'BASE STRATEGY INITIALIZED')
 
     def prenext(self):

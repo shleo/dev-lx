@@ -7,7 +7,7 @@ from strategies.base import StrategyBase
 
 class SimpleStrategy(StrategyBase):
     def __init__(self):
-        StrategyBase.__init__(self)
+        super().__init__()
 
         # Initialize member variables
         # Keep a reference to the "close" line in the data[0] dataseries
@@ -15,6 +15,7 @@ class SimpleStrategy(StrategyBase):
         self.order = None
         self.sma = bt.indicators.SimpleMovingAverage(
             self.datas[0], period=15)
+        self.log('*' * 5 + 'SIMPLE STRATEGY INITIALIZED')
 
     def notify_order(self, order):
         if order.status in [order.Submitted, order.Accepted]:
