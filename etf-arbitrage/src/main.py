@@ -9,6 +9,7 @@ import sys  # To find out the script name (in argv[0])
 import backtrader as bt
 
 # Import local components
+from feeds.stock_feed import StockFeed
 from strategies.simple_strategy import SimpleStrategy
 from brokers.etf_arbitrage_broker import EtfArbitrageBroker
 
@@ -25,20 +26,16 @@ if __name__ == '__main__':
     # Datas are in a subfolder of the samples. Need to find where the script is
     # because it could have been called from anywhere
     modpath = os.path.dirname(os.path.abspath(sys.argv[0]))
-    datapath = os.path.join(modpath, '../data/orcl-1995-2014.txt')
+    datapath = os.path.join(
+        modpath, '../../../etf-arbitrage-data/ETF_2021-11-15/all_stock_data/stock_000001.XSHE_2021-11-15.csv')
 
     # Create a Data Feed
-    data = bt.feeds.YahooFinanceCSVData(
+    data = StockFeed(
         dataname=datapath,
-        # Do not pass values before this date
-        fromdate=datetime.datetime(2000, 1, 1),
-        # Do not pass values before this date
-        todate=datetime.datetime(2000, 12, 31),
-        # Do not pass values after this date
-        reverse=False)
+        timeframe=bt.TimeFrame.Seconds)
 
     # Add the Data Feed to Cerebro
-    cerebro.adddata(data)
+    cerebro.adddata(data, name="000001.XSHE")
 
     # Set our desired cash start
     cerebro.broker.setcash(100000.0)

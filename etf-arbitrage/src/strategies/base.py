@@ -16,5 +16,5 @@ class StrategyBase(bt.Strategy):
         self.log('*' * 5 + 'BASE STRATEGY STOPPED')
 
     def log(self, txt, dt=None):
-        dt = dt or self.datas[0].datetime.date(0)
+        dt = dt or self.datas[0].datetime.time(0)
         print('[%s] %s' % (dt.isoformat(), txt))
