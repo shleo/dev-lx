@@ -72,7 +72,7 @@ class SimpleStrategy(StrategyBase):
                              (name, self.dataclose[name][0]))
 
                     # Keep track of the created order to avoid a 2nd order
-                    self.order = self.buy()
+                    self.order = self.buy(data)
 
             else:
 
@@ -82,4 +82,4 @@ class SimpleStrategy(StrategyBase):
                              (name, self.dataclose[name][0]))
 
                     # Keep track of the created order to avoid a 2nd order
-                    self.order = self.sell()
+                    self.order = self.sell(data)
