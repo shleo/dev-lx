@@ -61,8 +61,13 @@ class SimpleStrategy(StrategyBase):
             if self.order:
                 return
 
+            for position in self.positions:
+                self.log('Position: [%s %d]' %
+                         (position._name, self.positions[position].size))
+            self.log('Cash: %.2f' % self.broker.cash)
+
             # Check if we are in the market
-            if not self.position:
+            if name not in self.positions or self.positions[name].size <= 0:
 
                 # Not yet ... we MIGHT BUY if ...
                 if self.dataclose[name][0] > self.sma[name][0]:
