@@ -26,16 +26,22 @@ if __name__ == '__main__':
     # Datas are in a subfolder of the samples. Need to find where the script is
     # because it could have been called from anywhere
     modpath = os.path.dirname(os.path.abspath(sys.argv[0]))
-    datapath = os.path.join(
+    datapath1 = os.path.join(
         modpath, '../../../etf-arbitrage-data/ETF_2021-11-15/all_stock_data/stock_000001.XSHE_2021-11-15.csv')
+    datapath2 = os.path.join(
+        modpath, '../../../etf-arbitrage-data/ETF_2021-11-15/all_stock_data/stock_000002.XSHE_2021-11-15.csv')
 
     # Create a Data Feed
-    data = StockFeed(
-        dataname=datapath,
+    data1 = StockFeed(
+        dataname=datapath1,
+        timeframe=bt.TimeFrame.Seconds)
+    data2 = StockFeed(
+        dataname=datapath2,
         timeframe=bt.TimeFrame.Seconds)
 
     # Add the Data Feed to Cerebro
-    cerebro.adddata(data, name="000001.XSHE")
+    cerebro.adddata(data1, name="000001.XSHE")
+    cerebro.adddata(data2, name="000002.XSHE")
 
     # Set our desired cash start
     cerebro.broker.setcash(100000.0)

@@ -10,11 +10,15 @@ class SimpleStrategy(StrategyBase):
         super().__init__()
 
         # Initialize member variables
-        # Keep a reference to the "close" line in the data[0] dataseries
-        self.dataclose = self.datas[0].close
         self.order = None
-        self.sma = bt.indicators.SimpleMovingAverage(
-            self.datas[0], period=15)
+
+        # Keep a reference to the "close" line in the data[0] dataseries
+        self.dataclose = {}
+        self.sma = {}
+        for data in self.datas:
+            self.dataclose[data._name] = data.close
+            self.sma[data._name] = bt.indicators.SimpleMovingAverage(
+                data, period=15)
         self.log('*' * 5 + 'SIMPLE STRATEGY INITIALIZED')
 
     def notify_order(self, order):
@@ -46,30 +50,36 @@ class SimpleStrategy(StrategyBase):
     def next(self):
         StrategyBase.next(self)
 
-        # Simply log the closing price of the series from the reference
-        self.log('Close, %.2f : SMA, %.2f' % (self.dataclose[0], self.sma[0]))
+        for data in self.datas:
+            name = data._name
 
-        # Check if an order is pending ... if yes, we cannot send a 2nd one
-        if self.order:
-            return
+            # Simply log the closing price of the series from the reference
+            self.log('Name: %s, Close, %.2f : SMA, %.2f' %
+                     (name, self.dataclose[name][0], self.sma[name][0]))
 
-        # Check if we are in the market
-        if not self.position:
+            # Check if an order is pending ... if yes, we cannot send a 2nd one
+            if self.order:
+                return
 
-            # Not yet ... we MIGHT BUY if ...
-            if self.dataclose[0] > self.sma[0]:
+            # Check if we are in the market
+            if not self.position:
 
-                # BUY, BUY, BUY!!! (with all possible default parameters)
-                self.log('BUY CREATE, %.2f' % self.dataclose[0])
+                # Not yet ... we MIGHT BUY if ...
+                if self.dataclose[name][0] > self.sma[name][0]:
 
-                # Keep track of the created order to avoid a 2nd order
-                self.order = self.buy()
+                    # BUY, BUY, BUY!!! (with all possible default parameters)
+                    self.log('Name: %s, BUY CREATE, %.2f' %
+                             (name, self.dataclose[name][0]))
 
-        else:
+                    # Keep track of the created order to avoid a 2nd order
+                    self.order = self.buy()
 
-            if self.dataclose[0] < self.sma[0]:
-                # SELL, SELL, SELL!!! (with all possible default parameters)
-                self.log('SELL CREATE, %.2f' % self.dataclose[0])
+            else:
 
-                # Keep track of the created order to avoid a 2nd order
-                self.order = self.sell()
+                if self.dataclose[name][0] < self.sma[name][0]:
+                    # SELL, SELL, SELL!!! (with all possible default parameters)
+                    self.log('Name: %s, SELL CREATE, %.2f' %
+                             (name, self.dataclose[name][0]))
+
+                    # Keep track of the created order to avoid a 2nd order
+                    self.order = self.sell()
